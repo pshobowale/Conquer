@@ -41,6 +41,8 @@ bool ConquerMap::LoadAdjacencyGraph() {
       if (integer.length() > 0)
         adj.push_back(atoi(integer.c_str()));
 
+    // First Field in CSV is a duplicate
+    adj.erase(adj.begin());
     ConquerMap::_AdjacencyGraph.push_back(adj);
   }
 
@@ -74,8 +76,8 @@ bool ConquerMap::LoadLabelPositionGraph() {
     int iter = 0;
 
     for (string integer; getline(l, integer, ','); iter++) {
-      if (integer.length() > 0 and iter < 4)
-        pos[iter] = atoi(integer.c_str());
+      if (integer.length() > 0 and iter > 0 and iter < 5)
+        pos[iter - 1] = atoi(integer.c_str());
     }
 
     ConquerMap::_Label2Pixel.push_back(pos);
@@ -89,8 +91,7 @@ bool ConquerMap::LoadLabelPositionGraph() {
     for (int i = 0; i < 4; i++)
       cout << integer[i] << ", ";
     cout << "\b\b]\b\b\n";
-  }
-  */
+  }*/
 
   return true;
 }
