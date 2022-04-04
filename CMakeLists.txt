@@ -6,17 +6,21 @@ endif()
 
 project(Conquer VERSION 0.1.0)
 
-file(GLOB source_files CONFIGURE_DEPENDS
+file(GLOB SOURCE_FILES CONFIGURE_DEPENDS
     "main.cpp"
     "lib/*/*.cpp"
-    "lib/*/*.h"
-    ""
+    "lib/*/*.hpp"
+    "lib/*/*.c"
 )
+
+message("\nFound this files:")
+message(${SOURCE_FILES})
+message("\n")
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
 set(EXECUTABLE_NAME "Conquer")
-add_executable(${EXECUTABLE_NAME} main.cpp)
+add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 
 
 find_package(SFML 2.5 REQUIRED graphics window audio system network)
