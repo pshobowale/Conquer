@@ -2,28 +2,38 @@
 #define CONQUER_MAP_H
 
 #include "../Config/Config.hpp"
+#include <SDL2/SDL_surface.h>
+#include <cstddef>
 #include <vector>
 
-#include <SFML/Graphics/Image.hpp>
+#include <SDL2/SDL_image.h>
 
 class ConquerMap {
-private:
-  std::string svg_path;
-  ConquerConfig config;
 
+private:
+  bool _MapInitialized = false;
   std::vector<std::vector<int>> _AdjacencyGraph;
   std::vector<std::array<unsigned int, 4>> _Label2Pixel;
 
-  sf::Image _Pixel2Label;
-  sf::Image _BackgroundMask;
-  sf::Image _BordersMask;
+  SDL_Surface *_Pixel2Label = NULL;
+  SDL_Surface *_BackgroundMask = NULL;
+  SDL_Surface *_BordersMask = NULL;
 
-  bool LoadAdjacencyGraph();
-  bool LoadLabelPositionGraph();
-  bool LoadLabelMapAndMasks();
+  bool LoadAdjacencyGraph(ConquerConfig config);
+  bool LoadLabelPositionGraph(ConquerConfig config);
+  bool LoadLabelMapAndMasks(ConquerConfig config);
 
 public:
+  ConquerMap(void) = default;
   ConquerMap(ConquerConfig config);
+  ConquerMap(const ConquerMap &, bool delete_src=false);
+  ~ConquerMap();
+
+  ConquerMap operator=(const ConquerMap &src){return ConquerMap(src,false);};
+
+  bool isInitialized(void) { return _MapInitialized; }
+
+  SDL_Surface* getMap(){ return _BackgroundMask;};
 };
 
 #endif

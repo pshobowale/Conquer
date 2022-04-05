@@ -18,6 +18,8 @@ ConquerConfig::ConquerConfig(std::string fpath) {
     ConquerConfig::_BordersMaskPath = BORDERS_MASK_PNG_PATH ;
     ConquerConfig::_AdjacencyGraphPath = ADJACENCY_CSV_PATH;
     ConquerConfig::_Label2PixelPath = LABEL_2_PIXEL_CSV_PATH;
+
+    ConquerConfig::_GameSpeed=300;
   }
 }
 

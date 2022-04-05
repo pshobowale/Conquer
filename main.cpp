@@ -6,8 +6,10 @@
 
 int main() {
   ConquerConfig config = ConquerConfig();
-  ConquerMap map = ConquerMap(config);
-  // ConquerEngine engine = ConquerEngine(config,map);
-  // engine.Update();
+  ConquerEngine engine(config);
+  
+  while(!engine.stopped())
+    engine.Update();
+    
   return 0;
 }

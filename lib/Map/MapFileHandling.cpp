@@ -8,20 +8,12 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 using namespace std;
 
-ConquerMap::ConquerMap(ConquerConfig config) {
-  config = config;
-  bool Loaded = LoadAdjacencyGraph() && 
-                LoadLabelPositionGraph() &&
-                LoadLabelMapAndMasks();
-  if (!Loaded)
-    throw std::runtime_error("Some Files could not be found or are corrupted\n\
-                              Please check if the config is valid!");
-}
-
-bool ConquerMap::LoadAdjacencyGraph() {
+bool ConquerMap::LoadAdjacencyGraph(ConquerConfig config) {
   ifstream adj_csv_file(config.getAdjacencyGraphPath());
 
   // First Line describes all Fields
@@ -58,7 +50,7 @@ bool ConquerMap::LoadAdjacencyGraph() {
   return true;
 }
 
-bool ConquerMap::LoadLabelPositionGraph() {
+bool ConquerMap::LoadLabelPositionGraph(ConquerConfig config) {
   ifstream l2p_csv_file(config.getLabel2PixelPath());
 
   // First Line describes all Fields
@@ -96,11 +88,13 @@ bool ConquerMap::LoadLabelPositionGraph() {
   return true;
 }
 
-bool ConquerMap::LoadLabelMapAndMasks() {
-  bool Loaded =
-      ConquerMap::_Pixel2Label.loadFromFile(config.getMapPath()) &&
-      ConquerMap::_BackgroundMask.loadFromFile(config.getBackgroundMaskPath()) &&
-      ConquerMap::_BackgroundMask.loadFromFile(config.getBorderMaskPath());
-
-  return Loaded;
+bool ConquerMap::LoadLabelMapAndMasks(ConquerConfig config) {
+  
+      ConquerMap::_Pixel2Label=IMG_Load(config.getMapPath().c_str());
+      ConquerMap::_BackgroundMask = IMG_Load(config.getBackgroundMaskPath().c_str());
+      ConquerMap::_BordersMask = IMG_Load(config.getBorderMaskPath().c_str());
+      
+      
+  //IMG_Load returns NULL if no image is found -->Loaded = NULL/POINTER!0 && N/P && N/P
+  return (_Pixel2Label && _BackgroundMask && _BordersMask);
 }

@@ -6,6 +6,8 @@ endif()
 
 project(Conquer VERSION 0.1.0)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
 file(GLOB SOURCE_FILES CONFIGURE_DEPENDS
     "main.cpp"
     "lib/*/*.cpp"
@@ -23,8 +25,12 @@ set(EXECUTABLE_NAME "Conquer")
 add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 
 
-find_package(SFML 2.5 REQUIRED graphics window audio system network)
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE sfml-graphics sfml-window sfml-audio sfml-system sfml-network)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image)
+include_directories(${EXECUTABLE_NAME} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
+target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+
+message( ${SDL2_IMAGE_INCLUDE_DIR})
 
 #CPack packaging
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

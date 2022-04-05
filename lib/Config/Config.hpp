@@ -19,6 +19,8 @@ class ConquerConfig{
                     _AdjacencyGraphPath,
                     _Label2PixelPath;
 
+        unsigned int _GameSpeed;
+
     public:
         ConquerConfig(std::string fpath = "");
 
@@ -34,6 +36,10 @@ class ConquerConfig{
         std::string getBorderMaskPath(){return _BordersMaskPath;};
         std::string getAdjacencyGraphPath(){return _AdjacencyGraphPath;};
         std::string getLabel2PixelPath(){return _Label2PixelPath;};
+
+        //Game Setting
+
+        unsigned int getGameSpeed(){return _GameSpeed;};
 
         
 
