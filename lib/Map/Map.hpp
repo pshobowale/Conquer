@@ -1,5 +1,4 @@
-#ifndef CONQUER_MAP_H
-#define CONQUER_MAP_H
+#pragma once
 
 #include "../Config/Config.hpp"
 #include <SDL2/SDL_surface.h>
@@ -35,5 +34,3 @@ public:
 
   SDL_Surface* getMap(){ return _BackgroundMask;};
 };
-
-#endif

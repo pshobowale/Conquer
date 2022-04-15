@@ -1,6 +1,4 @@
-
-#ifndef CONQUER_ENGINE_H
-#define CONQUER_ENGINE_H
+#pragma once
 
 #include "../Config/Config.hpp"
 #include "../Map/Map.hpp"
@@ -32,5 +30,3 @@ public:
   bool stopped(void) { return _quit; };
   void Update(bool force = false);
 };
-
-#endif

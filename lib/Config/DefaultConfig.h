@@ -1,3 +1,5 @@
+#pragma once
+
 #define WINDOW_TITLE                "Conquer"
 
 #define WINDOW_HEIGHT               800

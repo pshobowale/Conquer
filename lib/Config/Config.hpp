@@ -1,7 +1,7 @@
 
+#pragma once
 #include <SFML/System/String.hpp>
-#ifndef CONQUER_CONFIG_H
-    #define CONQUER_CONFIG_H
+
 
 #include <string>
 
@@ -45,5 +45,3 @@ class ConquerConfig{
 
 
 };
-
-#endif

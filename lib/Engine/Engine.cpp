@@ -53,6 +53,8 @@ void ConquerEngine::init() {
 }
 
 void ConquerEngine::Update(bool force) {
+
+  
   SDL_Event event;
 
   // Events management
@@ -105,16 +107,10 @@ void ConquerEngine::Update(bool force) {
   if (dest.y < 0)
     dest.y = 0;
 
-  // clears the screen
+  // Double Buffer calls
   SDL_RenderClear(renderer);
   SDL_RenderCopy(renderer, tex, NULL, &dest);
-
-  // triggers the double buffers
-  // for multiple rendering
   SDL_RenderPresent(renderer);
-
-  // calculates to 60 fps
-  SDL_Delay(1000 / 120);
 
   if (_quit) {
     // destroy texture
