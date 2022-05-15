@@ -11,4 +11,4 @@
 #define BORDERS_MASK_PNG_PATH       "assets/Maps/Europe/Borders.png"
 #define PIXEL_2_LABEL_PNG_PATH      "assets/Maps/Europe/Map.png"
 
-#define GAME_SPEED 30
+#define GAME_SPEED 90

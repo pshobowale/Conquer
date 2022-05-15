@@ -93,6 +93,8 @@ bool ConquerMap::LoadLabelMapAndMasks(ConquerConfig config) {
       ConquerMap::_Pixel2Label=IMG_Load(config.getMapPath().c_str());
       ConquerMap::_BackgroundMask = IMG_Load(config.getBackgroundMaskPath().c_str());
       ConquerMap::_BordersMask = IMG_Load(config.getBorderMaskPath().c_str());
+      _MapDims.x=_BordersMask->w;
+      _MapDims.y=_BordersMask->h;
       
       
   //IMG_Load returns NULL if no image is found -->Loaded = NULL/POINTER!0 && N/P && N/P

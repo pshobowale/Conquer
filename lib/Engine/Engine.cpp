@@ -3,117 +3,63 @@
 #include "Engine.hpp"
 #include "../Config/Config.hpp"
 #include "../Map/Map.hpp"
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
+#include <cstddef>
 #include <iostream>
 #include <iterator>
 
 ConquerEngine::ConquerEngine(ConquerConfig config)
-    : map(ConquerMap(config)), _windowHeight(config.getWindowHeight()),
+    : map(ConquerMap(config)),
+      controls(ConquerControls(config)), 
+      _windowHeight(config.getWindowHeight()),
       _windowWidth(config.getWindowWidth()),
-      _windowName(config.getWindowTitle()),
-      speed(config.getGameSpeed()) {
-  init();
-};
+      _windowName(config.getWindowTitle()){
 
-ConquerEngine::~ConquerEngine() { map.~ConquerMap(); }
-
-void ConquerEngine::init() {
- 
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-    printf("error initializing SDL: %s\n", SDL_GetError());
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+    std::cerr<<"error initializing SDL: "<<SDL_GetError()<<std::endl;
+    _quit=true;
+    return;
   }
-  window = SDL_CreateWindow("GAME", // creates a window
+  if (!map.isInitialized()){
+    std::cerr<<"Failed to initialize Map"<<std::endl;
+    _quit=true;
+    return;
+  }
+
+  
+  window = SDL_CreateWindow(_windowName.c_str(), 
                             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                             _windowWidth, _windowHeight, 0);
 
-  // triggers the program that controls
-  // your graphics hardware and sets flags
-  Uint32 render_flags = SDL_RENDERER_ACCELERATED;
 
-  // creates a renderer to render our images
+  Uint32 render_flags = SDL_RENDERER_ACCELERATED;
   renderer = SDL_CreateRenderer(window, -1, render_flags);
 
   // loads image to our graphics hardware memory.
-  tex = SDL_CreateTextureFromSurface(renderer, map.getMap());
-
-  // connects our texture with dest to control position
-  SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
-
-  // adjust height and width of our image box.
-  dest.w /= 12;
-  dest.h /= 12;
-
-  // sets initial x-position of object
-  dest.x = (_windowWidth - dest.w) / 2;
-
-  // sets initial y-position of object
-  dest.y = (_windowHeight - dest.h) / 2;
-
+  tex = SDL_CreateTextureFromSurface(renderer, map.getFullMap());
+  controls.setMapDims(map.getMapDims());
 
 }
 
 void ConquerEngine::Update(bool force) {
 
-  
-  SDL_Event event;
+  SDL_Rect zoom_slice=controls.getCameraUpdate();
+  std::cout<<zoom_slice.x<<" "<<zoom_slice.y<<" "<<zoom_slice.w<<" "<<zoom_slice.h<<std::endl;
 
-  // Events management
-  while (SDL_PollEvent(&event)) {
-    switch (event.type) {
-
-    case SDL_QUIT:
-      // handling of close button
-      _quit = true;
-      break;
-
-    case SDL_KEYDOWN:
-      // keyboard API for key pressed
-      switch (event.key.keysym.scancode) {
-      case SDL_SCANCODE_W:
-      case SDL_SCANCODE_UP:
-        dest.y -= speed / 30;
-        break;
-      case SDL_SCANCODE_A:
-      case SDL_SCANCODE_LEFT:
-        dest.x -= speed / 30;
-        break;
-      case SDL_SCANCODE_S:
-      case SDL_SCANCODE_DOWN:
-        dest.y += speed / 30;
-        break;
-      case SDL_SCANCODE_D:
-      case SDL_SCANCODE_RIGHT:
-        dest.x += speed / 30;
-        break;
-      default:
-        break;
-      }
-    }
-  }
-
-  // right boundary
-  if (dest.x + dest.w > _windowWidth)
-    dest.x = _windowWidth - dest.w;
-
-  // left boundary
-  if (dest.x < 0)
-    dest.x = 0;
-
-  // bottom boundary
-  if (dest.y + dest.h > _windowHeight)
-    dest.y = _windowHeight - dest.h;
-
-  // upper boundary
-  if (dest.y < 0)
-    dest.y = 0;
-
-  // Double Buffer calls
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer);
-  SDL_RenderCopy(renderer, tex, NULL, &dest);
+  SDL_RenderCopy(renderer, tex, &zoom_slice, NULL);
   SDL_RenderPresent(renderer);
 
-  if (_quit) {
-    // destroy texture
+  if (controls.Quit()) {
+    _quit=true;
+  }
+}
+
+ConquerEngine::~ConquerEngine(){
+      // destroy texture
     SDL_DestroyTexture(tex);
 
     // destroy renderer
@@ -124,5 +70,6 @@ void ConquerEngine::Update(bool force) {
 
     // close SDL
     SDL_Quit();
-  }
-}
+};
+
+

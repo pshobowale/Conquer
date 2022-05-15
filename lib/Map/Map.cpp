@@ -1,6 +1,8 @@
 #include "Map.hpp"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 
 #include <iostream>
@@ -15,7 +17,7 @@ ConquerMap::ConquerMap(ConquerConfig config) {
   ConquerMap::_MapInitialized = true;
 }
 
-ConquerMap::ConquerMap(const ConquerMap &src, bool delete_src) {
+ConquerMap::ConquerMap(const ConquerMap &src) {
   if (src._MapInitialized == false)
     std::cerr << "You tried to copy an uninitialized Map";
   else {
@@ -35,24 +37,26 @@ ConquerMap::ConquerMap(const ConquerMap &src, bool delete_src) {
     _BordersMask = SDL_ConvertSurface(
         src._BordersMask, src._BordersMask->format, src._BordersMask->flags);
 
-    _MapInitialized = !_AdjacencyGraph.empty() && !_Label2Pixel.empty() &&
-                     _Pixel2Label && _BackgroundMask && _BordersMask;
+    _MapDims.x=src._BordersMask->w;
+    _MapDims.y=src._BordersMask->h;
+
+        _MapInitialized = !_AdjacencyGraph.empty() && !_Label2Pixel.empty() &&
+                          _Pixel2Label && _BackgroundMask && _BordersMask;
 
     if (!_MapInitialized)
       std::cerr << "Failed to copy map";
 
-    if (delete_src)
-        src.~ConquerMap();
   }
 }
 
-ConquerMap::~ConquerMap(){
-    _AdjacencyGraph=std::vector<std::vector<int>>();
-    _Label2Pixel=std::vector<std::array<unsigned int, 4>>();
+ConquerMap::~ConquerMap() {
+  _AdjacencyGraph = std::vector<std::vector<int>>();
+  _Label2Pixel = std::vector<std::array<unsigned int, 4>>();
 
-    SDL_FreeSurface(_Pixel2Label);
-    SDL_FreeSurface(_BackgroundMask);
-    SDL_FreeSurface(_BordersMask);
+  SDL_FreeSurface(_Pixel2Label);
+  SDL_FreeSurface(_BackgroundMask);
+  SDL_FreeSurface(_BordersMask);
 
-    _MapInitialized=false;
+  _MapInitialized = false;
 }
+

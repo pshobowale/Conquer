@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../Config/Config.hpp"
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <cstddef>
 #include <vector>
@@ -17,6 +19,7 @@ private:
   SDL_Surface *_Pixel2Label = NULL;
   SDL_Surface *_BackgroundMask = NULL;
   SDL_Surface *_BordersMask = NULL;
+  SDL_Point _MapDims;
 
   bool LoadAdjacencyGraph(ConquerConfig config);
   bool LoadLabelPositionGraph(ConquerConfig config);
@@ -25,12 +28,15 @@ private:
 public:
   ConquerMap(void) = default;
   ConquerMap(ConquerConfig config);
-  ConquerMap(const ConquerMap &, bool delete_src=false);
+  ConquerMap(const ConquerMap &);
   ~ConquerMap();
 
-  ConquerMap operator=(const ConquerMap &src){return ConquerMap(src,false);};
+  ConquerMap operator=(const ConquerMap &src) {
+    return ConquerMap(src);
+  };
 
-  bool isInitialized(void) { return _MapInitialized; }
+  bool isInitialized(void) { return _MapInitialized; };
 
-  SDL_Surface* getMap(){ return _BackgroundMask;};
+  SDL_Surface *getFullMap() { return _BackgroundMask; };
+  SDL_Point getMapDims(){return _MapDims;};
 };
