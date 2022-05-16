@@ -2,7 +2,7 @@
 
 #define WINDOW_TITLE                "Conquer"
 
-#define WINDOW_HEIGHT               800
+#define WINDOW_HEIGHT               600
 #define WINDOW_WIDTH                400
 
 #define ADJACENCY_CSV_PATH          "assets/Maps/Europe/adjacency.csv"
@@ -11,4 +11,4 @@
 #define BORDERS_MASK_PNG_PATH       "assets/Maps/Europe/Borders.png"
 #define PIXEL_2_LABEL_PNG_PATH      "assets/Maps/Europe/Map.png"
 
-#define GAME_SPEED 90
+#define GAME_SPEED 150

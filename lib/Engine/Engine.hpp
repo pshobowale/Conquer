@@ -17,7 +17,6 @@ private:
 
   SDL_Window *window;
   SDL_Renderer *renderer;
-  SDL_Texture *tex;
 
 
   bool _quit = false;

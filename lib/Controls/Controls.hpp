@@ -10,7 +10,8 @@ class ConquerControls{
         int dx=0,dy=0,dz=0;
         unsigned int wh=0,ww=0,speed=0;
         unsigned int mw=0,mh=0;
-        float window_ratio=1;
+        float window_ratio=1.0;
+        float scale=0.0;
         SDL_Rect MapSlice;
         bool _quit=false;
 
@@ -32,5 +33,6 @@ class ConquerControls{
 
         SDL_Rect getCameraUpdate(void);
         void setMapDims(SDL_Point);
+        void setRelativeScaleAndPosition(float rel_scale,float rel_x,float rel_y);
         bool Quit(void){return _quit;};
 };
