@@ -1,6 +1,8 @@
 #include "../Config/Config.hpp"
 #include "Map.hpp"
 
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_surface.h>
 #include <cstddef>
 #include <fstream>
 #include <iostream>
@@ -9,8 +11,9 @@
 #include <string>
 #include <vector>
 #include <SDL2/SDL.h>
+#define STB_IMAGE_IMPLEMENTATION
 #include <SDL2/SDL_image.h>
-
+#include "png.h"
 using namespace std;
 
 bool ConquerMap::LoadAdjacencyGraph(ConquerConfig config) {
@@ -89,12 +92,9 @@ bool ConquerMap::LoadLabelPositionGraph(ConquerConfig config) {
 }
 
 bool ConquerMap::LoadLabelMapAndMasks(ConquerConfig config) {
-  
-      ConquerMap::_Pixel2Label=IMG_Load(config.getMapPath().c_str());
       ConquerMap::_BackgroundMask = IMG_Load(config.getBackgroundMaskPath().c_str());
       ConquerMap::_BordersMask = IMG_Load(config.getBorderMaskPath().c_str());
-      _MapDims.x=_BordersMask->w;
-      _MapDims.y=_BordersMask->h;
+      ConquerMap::_Pixel2Label=stbi_load_16(config.getMapPath().c_str(), &_MapDims.x, &_MapDims.y, NULL,1);
       
       
   //IMG_Load returns NULL if no image is found -->Loaded = NULL/POINTER!0 && N/P && N/P

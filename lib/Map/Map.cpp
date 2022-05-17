@@ -29,10 +29,7 @@ ConquerMap::ConquerMap(const ConquerMap &src) {
     for (auto element : src._Label2Pixel)
       _Label2Pixel.push_back(element);
 
-    _Pixel2Label = SDL_ConvertSurface(
-        src._Pixel2Label, src._Pixel2Label->format, src._Pixel2Label->flags);
-
-
+    
 
     _BackgroundMask = SDL_ConvertSurface(src._BackgroundMask, src._BackgroundMask->format,
                                          src._BackgroundMask->flags);
@@ -58,7 +55,6 @@ ConquerMap::~ConquerMap() {
   _AdjacencyGraph = std::vector<std::vector<int>>();
   _Label2Pixel = std::vector<std::array<unsigned int, 4>>();
 
-  SDL_FreeSurface(_Pixel2Label);
   SDL_FreeSurface(_BackgroundMask);
   SDL_FreeSurface(_BordersMask);
   SDL_DestroyTexture(Scene);
@@ -77,18 +73,19 @@ SDL_Texture* ConquerMap::getMap(SDL_Renderer* renderer, SDL_Rect zoom){
 
 
 void ConquerMap::ColorizeByID(unsigned int id, SDL_Colour color){
-  return;
+  return; //ToDo Load Images
 }
 
 void ConquerMap::ColorizeByPosition(SDL_Point position,SDL_Rect zoom_slice,SDL_Colour color){
-  unsigned int id=0;
+  long long int id=0;
 
-  int x= 700;//position.x+zoom_slice.w;
-  int y= 700;//position.y+zoom_slice.h;
-  auto pixels=(Uint32*)_Pixel2Label->pixels;
-  id = pixels[y*_Pixel2Label->pitch+x];
-  
-  ColorizeByID(id,color);
+  int x= position.x+zoom_slice.w;
+  int y= position.y+zoom_slice.h;
+
+  if(x<_MapDims.x && y<_MapDims.y){
+    id = _Pixel2Label[y*_MapDims.x+x];
+    ColorizeByID(id,color);
+  }
 }
 
 void ConquerMap::CreateSceneTextures(SDL_Renderer* renderer){

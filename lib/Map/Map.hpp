@@ -17,7 +17,7 @@ private:
   std::vector<std::vector<int>> _AdjacencyGraph;
   std::vector<std::array<unsigned int, 4>> _Label2Pixel;
 
-  SDL_Surface *_Pixel2Label = NULL;
+  unsigned short *_Pixel2Label = NULL;
   SDL_Surface *_BackgroundMask = NULL;
   SDL_Surface *_BordersMask = NULL;
 
@@ -28,7 +28,7 @@ private:
   bool LoadAdjacencyGraph(ConquerConfig config);
   bool LoadLabelPositionGraph(ConquerConfig config);
   bool LoadLabelMapAndMasks(ConquerConfig config);
-  void CreateSceneTextures(SDL_Renderer* renderer);
+  void CreateSceneTextures(SDL_Renderer *renderer);
 
 public:
   ConquerMap(void) = default;
@@ -36,14 +36,12 @@ public:
   ConquerMap(const ConquerMap &);
   ~ConquerMap();
 
-  ConquerMap operator=(const ConquerMap &src) {
-    return ConquerMap(src);
-  };
+  ConquerMap operator=(const ConquerMap &src) { return ConquerMap(src); };
 
   bool isInitialized(void) { return _MapInitialized; };
-  SDL_Point getMapDims(){return _MapDims;};
-  SDL_Texture* getMap(SDL_Renderer* renderer , SDL_Rect zoom);
-  void ColorizeByPosition(SDL_Point position,SDL_Rect zoom_slice,SDL_Colour color);
+  SDL_Point getMapDims() { return _MapDims; };
+  SDL_Texture *getMap(SDL_Renderer *renderer, SDL_Rect zoom);
+  void ColorizeByPosition(SDL_Point position, SDL_Rect zoom_slice,
+                          SDL_Colour color);
   void ColorizeByID(unsigned int id, SDL_Color color);
-
 };

@@ -44,7 +44,7 @@ void ConquerEngine::Update(bool force) {
   SDL_Point zero;
   SDL_Color color;
 
-  // map.ColorizeByPosition(zero,zoom_slice, color);
+  map.ColorizeByPosition(zero,zoom_slice, color);
   auto tex = map.getMap(renderer, zoom_slice);
 
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);

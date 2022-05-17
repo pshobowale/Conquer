@@ -88,6 +88,7 @@ void ConquerControls::setMapDims(SDL_Point dims){
 void ConquerControls::setRelativeScaleAndPosition(float rel_scale,float rel_x,float rel_y){
   this->scale=rel_scale;
 
+  //Prevent Distortions by Limiting to max rel_pos plausible/possible
   if (window_ratio>1){
     rel_y=SDL_min(1.0-rel_scale,rel_y);
     rel_x=SDL_min(0.75*rel_scale,rel_x);
