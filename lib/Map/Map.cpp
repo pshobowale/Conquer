@@ -73,11 +73,11 @@ SDL_Texture* ConquerMap::getMap(SDL_Renderer* renderer, SDL_Rect zoom){
 
 
 void ConquerMap::ColorizeByID(unsigned int id, SDL_Colour color){
-  return; //ToDo Load Images
+  return; //ToDo Load Images by Label2Pixel
 }
 
 void ConquerMap::ColorizeByPosition(SDL_Point position,SDL_Rect zoom_slice,SDL_Colour color){
-  long long int id=0;
+  unsigned short id=0;
 
   int x= position.x+zoom_slice.w;
   int y= position.y+zoom_slice.h;
