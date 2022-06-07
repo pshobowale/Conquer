@@ -72,23 +72,31 @@ SDL_Texture* ConquerMap::getMap(SDL_Renderer* renderer, SDL_Rect zoom){
 }
 
 
-void ConquerMap::ColorizeByID(unsigned int id, SDL_Colour color){
-  return; //ToDo Load Images by Label2Pixel
-  //std::cout<<"id:"<<id<<" color:"<<color.r<<color.g<<color.b<<std::endl;
-}
 
-void ConquerMap::ColorizeByPosition(SDL_Point position,SDL_Rect zoom_slice,SDL_Colour color){
+
+void ConquerMap::ColorizeByPosition(SDL_FPoint rel_pos,SDL_Rect zoom_slice,SDL_Colour color){
   unsigned short id=0;
 
-  int x= position.x+zoom_slice.w;
-  int y= position.y+zoom_slice.h;
+  int x= std::round(rel_pos.x*zoom_slice.w)+zoom_slice.x;
+  int y= std::round(rel_pos.y*zoom_slice.h)+zoom_slice.y;
 
-  //std::cout<<"x:"<<x<<" y: "<<y<<std::endl;
+  ColorizeByMapPosition(SDL_Point {x,y}, zoom_slice, color);
+  std::cout<<x<<" "<<y<<std::endl;
+  
+}
 
-  if(x<_MapDims.x && y<_MapDims.y){
-    id = _Pixel2Label[y*_MapDims.x+x];
+void ConquerMap::ColorizeByMapPosition(SDL_Point position, SDL_Rect zoom_slice, SDL_Color color){
+  if(position.x<_MapDims.x && position.y<_MapDims.y){
+    auto id = _Pixel2Label[position.y*_MapDims.x+position.x];
     ColorizeByID(id,color);
   }
+}
+
+void ConquerMap::ColorizeByID(unsigned int id, SDL_Colour color){
+  
+  std::cout<<"id:"<<id<<std::endl;
+  std::cout<<_Label2Pixel[id][0]<<" "<<_Label2Pixel[id][1]<<" "<<_Label2Pixel[id][2]<<" "<<_Label2Pixel[id][3]<<std::endl;
+  return; //ToDo Load Images by Label2Pixel
 }
 
 void ConquerMap::CreateSceneTextures(SDL_Renderer* renderer){

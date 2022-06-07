@@ -39,12 +39,15 @@ void ConquerEngine::Update(bool force) {
 
   GameControls gc = controls.getUpdate();
 
-  SDL_Point zero;
-  SDL_Color color;
 
-  zero.x=0;
-  zero.y=0;
-  map.ColorizeByPosition(zero,gc.MapSlice, color);
+  if(gc.ClickPosition.x>0 && gc.ClickPosition.y>0){
+    float rx=(float)gc.ClickPosition.x/_windowWidth;
+    float ry=(float)gc.ClickPosition.y/_windowHeight;
+
+    map.ColorizeByPosition(SDL_FPoint{rx,ry}, gc.MapSlice, SDL_Color{155,0,0});
+
+  }
+  
   auto tex = map.getMap(renderer, gc.MapSlice);
 
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);

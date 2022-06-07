@@ -13,14 +13,13 @@
 
 GameControls ConquerControls::getUpdate(){
     SDL_Event event;
-    SDL_Rect slice;
     dx=0,dy=0,dz=0;
-
+    Controls.ClickPosition={-1,-1};
 
     while(SDL_PollEvent(&event)){
         switch(event.type){
             case SDL_QUIT:
-                _quit = true;
+                quit = true;
                 break;
             case SDL_KEYDOWN:
                 handleKeyboard(event);
@@ -28,6 +27,7 @@ GameControls ConquerControls::getUpdate(){
             
             case SDL_MOUSEBUTTONDOWN:
                 SDL_SetRelativeMouseMode(SDL_TRUE);
+                mouse_moved=false;
                 break;
 
             case SDL_MOUSEMOTION:
@@ -149,21 +149,21 @@ void ConquerControls::handleMouse(SDL_Event event){
   int xrel=0,yrel=0;
   SDL_GetRelativeMouseState(&xrel, &yrel);
 
-  //
-  if(((++xrel)*(++yrel)<6) && event.type==SDL_MOUSEBUTTONUP){
-    //std::cout<<"Clicked! x:"<<event.motion.x<<" y:"<<event.motion.y<<std::endl;
+  if(event.type==SDL_MOUSEBUTTONUP && !mouse_moved){
     Controls.ClickPosition={event.motion.x,event.motion.y};
-    SDL_SetRelativeMouseMode(SDL_FALSE);
+    return;
   }
-  else switch(event.motion.state){
-    std::cout<<"Moved! xrel:"<<xrel<<" yrel:"<<yrel<<std::endl;
+    
+  mouse_moved=true;
+  switch(event.motion.state){
+    //std::cout<<"Moved! xrel:"<<xrel<<" yrel:"<<yrel<<std::endl;
     case SDL_BUTTON_LMASK:
       dx+=xrel/2;
       dy-=yrel/2;
       break;
 
     case SDL_BUTTON_RMASK:
-      dz+=yrel;
+      dz+=yrel/2;
       break;
   }
 

@@ -18,7 +18,8 @@ class ConquerControls{
         float window_ratio=1.0;
         float scale=0.0;
         GameControls Controls;
-        bool _quit=false;
+        bool mouse_moved=false;
+        bool quit=false;
 
         void handleKeyboard(SDL_Event);
         void handleMouse(SDL_Event);
@@ -41,5 +42,5 @@ class ConquerControls{
         GameControls getUpdate(void);
         void setMapDims(SDL_Point);
         void setRelativeScaleAndPosition(float rel_scale,float rel_x,float rel_y);
-        bool Quit(void){return _quit;};
+        bool Quit(void){return quit;};
 };

@@ -41,7 +41,7 @@ public:
   bool isInitialized(void) { return _MapInitialized; };
   SDL_Point getMapDims() { return _MapDims; };
   SDL_Texture *getMap(SDL_Renderer *renderer, SDL_Rect zoom);
-  void ColorizeByPosition(SDL_Point position, SDL_Rect zoom_slice,
-                          SDL_Colour color);
+  void ColorizeByPosition(SDL_FPoint rel_win_pos, SDL_Rect zoom_slice,SDL_Colour color);
+  void ColorizeByMapPosition(SDL_Point position,SDL_Rect zoom_slice, SDL_Color);
   void ColorizeByID(unsigned int id, SDL_Color color);
 };
