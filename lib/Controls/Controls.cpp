@@ -2,6 +2,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_stdinc.h>
 #include <iostream>
@@ -10,7 +11,7 @@
 
 
 
-SDL_Rect ConquerControls::getCameraUpdate(){
+GameControls ConquerControls::getUpdate(){
     SDL_Event event;
     SDL_Rect slice;
     dx=0,dy=0,dz=0;
@@ -24,7 +25,18 @@ SDL_Rect ConquerControls::getCameraUpdate(){
             case SDL_KEYDOWN:
                 handleKeyboard(event);
                 break;
+            
+            case SDL_MOUSEBUTTONDOWN:
+                SDL_SetRelativeMouseMode(SDL_TRUE);
+                break;
+
             case SDL_MOUSEMOTION:
+                  handleMouse(event);
+                  break;
+                  
+            case SDL_MOUSEBUTTONUP:
+                handleMouse(event);
+                SDL_SetRelativeMouseMode(SDL_FALSE);
                 break;
             case SDL_FINGERMOTION:
                 break;
@@ -33,6 +45,9 @@ SDL_Rect ConquerControls::getCameraUpdate(){
 
         }
     }
+
+
+
 
     //Check if Zoom does not distort and is inside
     
@@ -44,41 +59,43 @@ SDL_Rect ConquerControls::getCameraUpdate(){
     
     if(window_ratio<1){
       if(std::round(ww + (mw-ww)*scale/window_ratio)<=mh){
-        MapSlice.w = std::round(ww + (mw-ww)*scale);
-        MapSlice.h = std::round(MapSlice.w/window_ratio);
+        Controls.MapSlice.w = std::round(ww + (mw-ww)*scale);
+        Controls.MapSlice.h = std::round(Controls.MapSlice.w/window_ratio);
       }else 
         scale-=float(dz)/1000.0;
     }
     else 
       if(std::round(wh+ (mh-wh)*scale/window_ratio)<=mw){
-        MapSlice.h = std::round(wh+ (mh-wh)*scale);
-        MapSlice.w =std::round(MapSlice.h/window_ratio);
+        Controls.MapSlice.h = std::round(wh+ (mh-wh)*scale);
+        Controls.MapSlice.w =std::round(Controls.MapSlice.h/window_ratio);
       }else 
         scale-=float(dz)/1000.0;
       
-    float zoom_speed=std::max((float)MapSlice.h/wh,(float)MapSlice.w/ww);
-    MapSlice.x+=dx*zoom_speed;
-    MapSlice.y+=dy*zoom_speed;
+    float zoom_speed=std::max((float)Controls.MapSlice.h/wh,(float)Controls.MapSlice.w/ww);
+    Controls.MapSlice.x+=dx*zoom_speed;
+    Controls.MapSlice.y+=dy*zoom_speed;
 
     //Check if Camera is inside of Map
-    if((MapSlice.x+MapSlice.w)>mw)
-      MapSlice.x=mw-MapSlice.w;
+    if((Controls.MapSlice.x+Controls.MapSlice.w)>mw)
+      Controls.MapSlice.x=mw-Controls.MapSlice.w;
     
-    if(MapSlice.x<0)
-      MapSlice.x=0;
+    if(Controls.MapSlice.x<0)
+      Controls.MapSlice.x=0;
     
-    if((MapSlice.y+MapSlice.h)>mh)
-      MapSlice.y=mh-MapSlice.h;
+    if((Controls.MapSlice.y+Controls.MapSlice.h)>mh)
+      Controls.MapSlice.y=mh-Controls.MapSlice.h;
 
-    if(MapSlice.y<0)
-      MapSlice.y=0;
+    if(Controls.MapSlice.y<0)
+      Controls.MapSlice.y=0;
 
 
     //std::cout<<"dx: "<<dx<<" dy: "<<dy<<" dz:"<<dz<<" Scale:"<<scale<<"\n";
-    //std::cout<<MapSlice.x<<","<<MapSlice.y<<","<<MapSlice.w<<","<<MapSlice.h<<std::endl;
-    return MapSlice;
+    //std::cout<<Controls.MapSlice.x<<","<<Controls.MapSlice.y<<","<<Controls.MapSlice.w<<","<<Controls.MapSlice.h<<std::endl;
+    return Controls;
 
 };
+
+
 
 void ConquerControls::setMapDims(SDL_Point dims){
     mw=dims.x;
@@ -97,8 +114,8 @@ void ConquerControls::setRelativeScaleAndPosition(float rel_scale,float rel_x,fl
     rel_y=SDL_min(0.75*rel_scale,rel_y);
   }
 
-  MapSlice.x=std::round(mw*rel_x);
-  MapSlice.y=std::round(mh*rel_y);
+ Controls.MapSlice.x=std::round(mw*rel_x);
+ Controls.MapSlice.y=std::round(mh*rel_y);
 }
 
 void ConquerControls::handleKeyboard(SDL_Event event){
@@ -127,4 +144,27 @@ void ConquerControls::handleKeyboard(SDL_Event event){
 
  };
 
-  
+
+void ConquerControls::handleMouse(SDL_Event event){
+  int xrel=0,yrel=0;
+  SDL_GetRelativeMouseState(&xrel, &yrel);
+
+  //
+  if(((++xrel)*(++yrel)<6) && event.type==SDL_MOUSEBUTTONUP){
+    //std::cout<<"Clicked! x:"<<event.motion.x<<" y:"<<event.motion.y<<std::endl;
+    Controls.ClickPosition={event.motion.x,event.motion.y};
+    SDL_SetRelativeMouseMode(SDL_FALSE);
+  }
+  else switch(event.motion.state){
+    std::cout<<"Moved! xrel:"<<xrel<<" yrel:"<<yrel<<std::endl;
+    case SDL_BUTTON_LMASK:
+      dx+=xrel/2;
+      dy-=yrel/2;
+      break;
+
+    case SDL_BUTTON_RMASK:
+      dz+=yrel;
+      break;
+  }
+
+}

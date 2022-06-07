@@ -74,6 +74,7 @@ SDL_Texture* ConquerMap::getMap(SDL_Renderer* renderer, SDL_Rect zoom){
 
 void ConquerMap::ColorizeByID(unsigned int id, SDL_Colour color){
   return; //ToDo Load Images by Label2Pixel
+  //std::cout<<"id:"<<id<<" color:"<<color.r<<color.g<<color.b<<std::endl;
 }
 
 void ConquerMap::ColorizeByPosition(SDL_Point position,SDL_Rect zoom_slice,SDL_Colour color){
@@ -81,6 +82,8 @@ void ConquerMap::ColorizeByPosition(SDL_Point position,SDL_Rect zoom_slice,SDL_C
 
   int x= position.x+zoom_slice.w;
   int y= position.y+zoom_slice.h;
+
+  //std::cout<<"x:"<<x<<" y: "<<y<<std::endl;
 
   if(x<_MapDims.x && y<_MapDims.y){
     id = _Pixel2Label[y*_MapDims.x+x];

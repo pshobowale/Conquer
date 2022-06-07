@@ -4,6 +4,11 @@
 #include <SDL2/SDL_rect.h>
 #include "../Config/Config.hpp"
 
+typedef struct{
+    SDL_Point ClickPosition ={-1,-1};
+    SDL_Rect MapSlice={-1,-1,-1,-1};
+}GameControls;
+
 
 class ConquerControls{
     private:
@@ -12,7 +17,7 @@ class ConquerControls{
         unsigned int mw=0,mh=0;
         float window_ratio=1.0;
         float scale=0.0;
-        SDL_Rect MapSlice;
+        GameControls Controls;
         bool _quit=false;
 
         void handleKeyboard(SDL_Event);
@@ -24,14 +29,16 @@ class ConquerControls{
         wh(config.getWindowHeight()),
         speed(config.getGameSpeed()),
         dx(0),dy(0),dz(0){
-            MapSlice.x=0;
-            MapSlice.y=0;
-            MapSlice.w=config.getWindowWidth();
-            MapSlice.h=config.getWindowHeight();
+            Controls.MapSlice.x=0;
+            Controls.MapSlice.y=0;
+            Controls.MapSlice.w=config.getWindowWidth();
+            Controls.MapSlice.h=config.getWindowHeight();
             window_ratio=(float)config.getWindowHeight()/(float)config.getWindowWidth();
+            Controls.ClickPosition.x=0;
+            Controls.ClickPosition.y=0;
         }      
 
-        SDL_Rect getCameraUpdate(void);
+        GameControls getUpdate(void);
         void setMapDims(SDL_Point);
         void setRelativeScaleAndPosition(float rel_scale,float rel_x,float rel_y);
         bool Quit(void){return _quit;};

@@ -25,10 +25,8 @@ ConquerEngine::ConquerEngine(ConquerConfig config)
     _quit = true;
     return;
   }
-
-  window =
-      SDL_CreateWindow(_windowName.c_str(), SDL_WINDOWPOS_CENTERED,
-                       SDL_WINDOWPOS_CENTERED, _windowWidth, _windowHeight, 0);
+  window =SDL_CreateWindow(_windowName.c_str(), SDL_WINDOWPOS_CENTERED,
+                          SDL_WINDOWPOS_CENTERED, _windowWidth, _windowHeight, 0);
 
   Uint32 render_flags = SDL_RENDERER_ACCELERATED;
   renderer = SDL_CreateRenderer(window, -1, render_flags);
@@ -39,17 +37,19 @@ ConquerEngine::ConquerEngine(ConquerConfig config)
 
 void ConquerEngine::Update(bool force) {
 
-  SDL_Rect zoom_slice = controls.getCameraUpdate();
+  GameControls gc = controls.getUpdate();
 
   SDL_Point zero;
   SDL_Color color;
 
-  map.ColorizeByPosition(zero,zoom_slice, color);
-  auto tex = map.getMap(renderer, zoom_slice);
+  zero.x=0;
+  zero.y=0;
+  map.ColorizeByPosition(zero,gc.MapSlice, color);
+  auto tex = map.getMap(renderer, gc.MapSlice);
 
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer);
-  SDL_RenderCopy(renderer, tex, &zoom_slice, NULL);
+  SDL_RenderCopy(renderer, tex, &gc.MapSlice, NULL);
   SDL_RenderPresent(renderer);
 
   if (controls.Quit()) {
