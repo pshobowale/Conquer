@@ -3,7 +3,7 @@ import pickle
 Pixel2Label,BackgroundMask,Label2Pixel,AdjacencyDict=pickle.load(open("data.bin","rb"))
 
 
-print("label,x0,y0,dx,dy")
+print("label,y0,x0,dy,dx")
 for i,element in enumerate(Label2Pixel[:]):
     if len(element)==0:
         print("{},,,,,".format(i))

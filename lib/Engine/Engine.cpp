@@ -44,7 +44,7 @@ void ConquerEngine::Update(bool force) {
     float rx=(float)gc.ClickPosition.x/_windowWidth;
     float ry=(float)gc.ClickPosition.y/_windowHeight;
 
-    map.ColorizeByPosition(SDL_FPoint{rx,ry}, gc.MapSlice, SDL_Color{155,0,0});
+    map.ColorizeByPosition(renderer,SDL_FPoint{rx,ry}, gc.MapSlice, SDL_Color{155,0,0});
 
   }
   
