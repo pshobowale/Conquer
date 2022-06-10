@@ -3,7 +3,6 @@
 #include "../Config/Config.hpp"
 #include "../Map/Map.hpp"
 #include "../Controls/Controls.hpp"
-#include <SFML/Graphics.hpp>
 #include <string>
 
 class ConquerEngine {

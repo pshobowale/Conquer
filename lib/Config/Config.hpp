@@ -1,8 +1,5 @@
 
 #pragma once
-#include <SFML/System/String.hpp>
-
-
 #include <string>
 
 class ConquerConfig{

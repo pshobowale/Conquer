@@ -6,6 +6,7 @@
 #include <SDL2/SDL_surface.h>
 #include <cstddef>
 #include <vector>
+#include <array>
 
 #include <SDL2/SDL_image.h>
 
