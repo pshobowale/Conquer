@@ -1,4 +1,5 @@
 #include "Map.hpp"
+#include "SDL_error.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_blendmode.h>
@@ -9,6 +10,7 @@
 #include <SDL2/SDL_surface.h>
 
 #include <iostream>
+#include <ostream>
 
 ConquerMap::ConquerMap(ConquerConfig config) {
   config = config;
@@ -116,11 +118,14 @@ void ConquerMap::ColorizeByID(SDL_Renderer *renderer, unsigned int id,
 
 void ConquerMap::CreateSceneTextures(SDL_Renderer *renderer) {
   auto Background = SDL_CreateTextureFromSurface(renderer, _BackgroundMask);
+  std::cout<<SDL_GetError()<<std::endl;
   auto Borders = SDL_CreateTextureFromSurface(renderer, _BordersMask);
+  std::cout<<SDL_GetError()<<std::endl;
   Scene = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
                             SDL_TEXTUREACCESS_TARGET, _MapDims.x, _MapDims.y);
 
   SDL_SetRenderTarget(renderer, Scene);
+  std::cout<<SDL_GetError()<<std::endl<<std::endl;
   SDL_SetTextureColorMod(Background, 50, 50, 50);
 
   SDL_SetRenderDrawColor(renderer, 0x0F, 0x0F, 0xFF, 0xFF);
