@@ -28,8 +28,7 @@ ConquerEngine::ConquerEngine(ConquerConfig config)
   window =SDL_CreateWindow(_windowName.c_str(), SDL_WINDOWPOS_CENTERED,
                           SDL_WINDOWPOS_CENTERED, _windowWidth, _windowHeight, 0);
 
-  Uint32 render_flags = SDL_RENDERER_ACCELERATED;
-  renderer = SDL_CreateRenderer(window, -1, render_flags);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   controls.setMapDims(map.getMapDims());
   controls.setRelativeScaleAndPosition(1.0, 0.5, 0.5);
